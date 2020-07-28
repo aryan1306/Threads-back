@@ -17,6 +17,9 @@ const UserSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  bio: {
+    type: String,
+  },
   avatar: {
     type: String,
     default: "https://d3q6qq2zt8nhwv.cloudfront.net/m/1_extra_dq1a4r2g.jpg",

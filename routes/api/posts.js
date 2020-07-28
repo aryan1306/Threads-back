@@ -71,6 +71,32 @@ router.get("/", auth, async (req, res) => {
     return res.status(500).send("server error");
   }
 });
+//UPDATE POST
+//PUT ROUTE
+router.put("/update/:id", auth, async (req, res) => {
+  const userId = req.user.id;
+  const { text } = req.body;
+  try {
+    const post = await Post.findByIdAndUpdate(
+      req.params.id,
+      { text },
+      { new: true }
+    );
+    if (post.id !== req.params.id) {
+      return res.status(404).send("Post not found");
+    }
+    if (post.postedBy.toString() !== userId) {
+      return res.status(401).json({
+        msg: "User not authorized",
+      });
+    }
+    await post.save();
+    res.json(post);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send("server error");
+  }
+});
 //DELETE POST
 //DELETE ROUTE
 router.delete("/:id", auth, async (req, res) => {

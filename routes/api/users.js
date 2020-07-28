@@ -57,6 +57,27 @@ router.get("/", auth, async (req, res) => {
     return res.status(500).send("server error");
   }
 });
+//UPDATE USER PROFILE
+//PUT ROUTE
+router.put("/me", auth, async (req, res) => {
+  const userId = req.user.id;
+  const { name, avatar, bio } = req.body;
+  try {
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { name, avatar, bio },
+      { new: true }
+    );
+    if (user.id !== userId) {
+      return res.status(401).json({ msg: "User not Authorized" });
+    }
+    await user.save();
+    res.json(user);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send("server error");
+  }
+});
 //FOLLOW USER AND ADD FOLLOWING
 //PUT ROUTE
 router.put("/follow", auth, async (req, res) => {
