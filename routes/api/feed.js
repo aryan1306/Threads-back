@@ -19,5 +19,18 @@ router.get("/", auth, async (req, res) => {
     return res.status(500).send("server error");
   }
 });
+router.get("/all", auth, async (req, res) => {
+  try {
+    const posts = await Post.find()
+      .populate("comments", "id name")
+      .populate("comments.postedBy", "id name")
+      .populate("postedBy", "id name")
+      .sort("-created");
+    res.json(posts);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send("server error");
+  }
+});
 
 module.exports = router;

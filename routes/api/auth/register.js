@@ -12,7 +12,7 @@ router.post(
     check("email", "Please enter a valid email").isEmail(),
     check(
       "password",
-      "Please enter a password with 6 or more characters"
+      "Please enter a password with 8 or more characters"
     ).isLength({
       min: 8,
     }),
@@ -23,6 +23,13 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
     const { name, email, password } = req.body;
+    // @todo
+    // if (!password.match(/^([0-9]|[a-z])+([0-9a-z]+)$/i)) {
+    //   return res.status(400).json({
+    //     errors:
+    //       "Please enter a password with 8 or more characters with alphanumeric values",
+    //   });
+    // }
     try {
       let user = await User.findOne({ email });
       if (user) {

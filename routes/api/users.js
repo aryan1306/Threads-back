@@ -21,7 +21,36 @@ router.get("/me", auth, async (req, res) => {
     return res.status(500).send("server error");
   }
 });
-
+//ADD PROFILE PHOTO
+//POST ROUTE
+router.post("/profile-pic", auth, async (req, res) => {
+  const { avatar } = req.body;
+  const userId = req.user.id;
+  try {
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { avatar },
+      { new: true }
+    );
+    await user.save();
+    res.json(user.avatar);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send("server error");
+  }
+});
+//GET PROFILE PHOTO
+//GET ROUTE
+router.get("/profile-pic", auth, async (req, res) => {
+  const userId = req.user.id;
+  try {
+    const user = await User.findById(userId);
+    res.json(user.avatar);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send("server error");
+  }
+});
 //GET USER BY ID
 //GET ROUTE
 router.get("/:id", auth, async (req, res) => {
